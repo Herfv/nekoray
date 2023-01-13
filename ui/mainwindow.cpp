@@ -8,7 +8,7 @@
 #include "sys/AutoRun.hpp"
 
 #include "ui/ThemeManager.hpp"
-#include "ui/TrayIcon.hpp"
+#include "ui/Icon.hpp"
 #include "ui/edit/dialog_edit_profile.h"
 #include "ui/dialog_basic_settings.h"
 #include "ui/dialog_manage_groups.h"
@@ -175,11 +175,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         }
         refresh_proxy_list_impl(-1, action);
     });
-    ui->proxyListTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    ui->proxyListTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-    ui->proxyListTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
-    ui->proxyListTable->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
-    ui->proxyListTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
+    connect(ui->proxyListTable->horizontalHeader(), &QHeaderView::sectionResized, this, [=](int logicalIndex, int oldSize, int newSize) {
+        auto group = NekoRay::profileManager->CurrentGroup();
+        if (NekoRay::dataStore->refreshing_group || group == nullptr || !group->manually_column_width) return;
+        // save manually column width
+        group->column_width.clear();
+        for (int i = 0; i < ui->proxyListTable->horizontalHeader()->count(); i++) {
+            group->column_width.push_back(ui->proxyListTable->horizontalHeader()->sectionSize(i));
+        }
+        group->column_width[logicalIndex] = newSize;
+        group->Save();
+    });
     ui->tableWidget_conn->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     ui->tableWidget_conn->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     ui->tableWidget_conn->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
@@ -223,7 +229,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Setup Tray
     tray = new QSystemTrayIcon(this); // 初始化托盘对象tray
-    tray->setIcon(TrayIcon::GetIcon(TrayIcon::NONE));
+    tray->setIcon(Icon::GetTrayIcon(Icon::NONE));
     tray->setContextMenu(ui->menu_program); // 创建托盘菜单
     tray->show();                           // 让托盘图标显示在系统托盘上
     connect(tray, &QSystemTrayIcon::activated, this, [=](QSystemTrayIcon::ActivationReason reason) {
@@ -417,9 +423,13 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 }
 
 void MainWindow::show_group(int gid) {
+    if (NekoRay::dataStore->refreshing_group) return;
+    NekoRay::dataStore->refreshing_group = true;
+
     auto group = NekoRay::profileManager->GetGroup(gid);
     if (group == nullptr) {
         MessageBoxWarning(tr("Error"), QString("No such group: %1").arg(gid));
+        NekoRay::dataStore->refreshing_group = false;
         return;
     }
 
@@ -429,9 +439,28 @@ void MainWindow::show_group(int gid) {
     }
     ui->tabWidget->widget(groupId2TabIndex(gid))->layout()->addWidget(ui->proxyListTable);
 
+    // 列宽是否可调
+    if (group->manually_column_width) {
+        for (int i = 0; i <= 4; i++) {
+            ui->proxyListTable->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Interactive);
+            auto size = group->column_width.value(i);
+            if (size <= 0) size = ui->proxyListTable->horizontalHeader()->defaultSectionSize();
+            ui->proxyListTable->horizontalHeader()->resizeSection(i, size);
+        }
+    } else {
+        ui->proxyListTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+        ui->proxyListTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+        ui->proxyListTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+        ui->proxyListTable->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
+        ui->proxyListTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
+    }
+
+    // show proxies
     NekoRay::GroupSortAction gsa;
     gsa.scroll_to_started = true;
     refresh_proxy_list_impl(-1, gsa);
+
+    NekoRay::dataStore->refreshing_group = false;
 }
 
 // callback
@@ -587,8 +616,7 @@ void MainWindow::neko_set_spmode(int mode, bool save) {
 
         if (mode == NekoRay::SystemProxyMode::SYSTEM_PROXY) {
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
-            if (mode == NekoRay::SystemProxyMode::SYSTEM_PROXY && !IS_NEKO_BOX &&
-                !InRange(NekoRay::dataStore->inbound_http_port, 1, 65535)) {
+            if (mode == NekoRay::SystemProxyMode::SYSTEM_PROXY && !IS_NEKO_BOX && !IsValidPort(NekoRay::dataStore->inbound_http_port)) {
                 auto btn = QMessageBox::warning(this, software_name,
                                                 tr("Http inbound is not enabled, can't set system proxy."),
                                                 "OK", tr("Settings"), "", 0, 0);
@@ -646,7 +674,7 @@ void MainWindow::refresh_status(const QString &traffic_update) {
     }
     //
     auto display_http = tr("None");
-    if (InRange(NekoRay::dataStore->inbound_http_port, 1, 65535)) {
+    if (IsValidPort(NekoRay::dataStore->inbound_http_port)) {
         display_http = DisplayAddress(NekoRay::dataStore->inbound_address, NekoRay::dataStore->inbound_http_port);
     }
     auto display_socks = DisplayAddress(NekoRay::dataStore->inbound_address, NekoRay::dataStore->inbound_socks_port);
@@ -676,21 +704,23 @@ void MainWindow::refresh_status(const QString &traffic_update) {
         return tt.join(isTray ? "\n" : " ");
     };
 
-    auto icon_status_new = TrayIcon::NONE;
+    auto icon_status_new = Icon::NONE;
     if (NekoRay::dataStore->running_spmode == NekoRay::SystemProxyMode::SYSTEM_PROXY) {
-        icon_status_new = TrayIcon::SYSTEM_PROXY;
+        icon_status_new = Icon::SYSTEM_PROXY;
     } else if (NekoRay::dataStore->running_spmode == NekoRay::SystemProxyMode::VPN) {
-        icon_status_new = TrayIcon::VPN;
+        icon_status_new = Icon::VPN;
     } else if (!running.isNull()) {
-        icon_status_new = TrayIcon::RUNNING;
+        icon_status_new = Icon::RUNNING;
     }
 
+    // refresh title & window icon
     setWindowTitle(make_title(false));
-    if (icon_status_new != icon_status) QApplication::setWindowIcon(TrayIcon::GetIcon(TrayIcon::NONE));
+    if (icon_status_new != icon_status) QApplication::setWindowIcon(Icon::GetTrayIcon(Icon::NONE));
 
+    // refresh tray
     if (tray != nullptr) {
         tray->setToolTip(make_title(true));
-        if (icon_status_new != icon_status) tray->setIcon(TrayIcon::GetIcon(icon_status_new));
+        if (icon_status_new != icon_status) tray->setIcon(Icon::GetTrayIcon(icon_status_new));
     }
 
     icon_status = icon_status_new;
@@ -1310,7 +1340,7 @@ void MainWindow::show_log_impl(const QString &log) {
     }
 }
 
-#define ADD_TO_CURRENT_ROUTE(a, b) NekoRay::dataStore->routing->a = (SplitLines(NekoRay::dataStore->routing->a) << b).join("\n");
+#define ADD_TO_CURRENT_ROUTE(a, b) NekoRay::dataStore->routing->a = (SplitLines(NekoRay::dataStore->routing->a) << (b)).join("\n");
 
 void MainWindow::on_masterLogBrowser_customContextMenuRequested(const QPoint &pos) {
     QMenu *menu = ui->masterLogBrowser->createStandardContextMenu();
@@ -1437,27 +1467,36 @@ void MainWindow::refresh_connection_list(const QJsonArray &arr) {
         row++;
         ui->tableWidget_conn->insertRow(row);
 
+        auto f0 = std::make_unique<QTableWidgetItem>();
+        f0->setData(114514, item["ID"].toInt());
+
         // C0: Status
-        auto *f = new QTableWidgetItem("");
-        f->setData(114514, item["ID"].toInt());
+        auto c0 = new QLabel;
         auto start_t = item["Start"].toInt();
         auto end_t = item["End"].toInt();
-        if (end_t > 0) {
-            f->setText(tr("End"));
+        // icon
+        auto outboundTag = item["Tag"].toString();
+        if (outboundTag == "block") {
+            c0->setPixmap(Icon::GetMaterialIcon("cancel"));
         } else {
-            f->setText(tr("Active"));
+            if (end_t > 0) {
+                c0->setPixmap(Icon::GetMaterialIcon("history"));
+            } else {
+                c0->setPixmap(Icon::GetMaterialIcon("swap-vertical"));
+            }
         }
-        f->setToolTip(tr("Start: %1\nEnd: %2").arg(DisplayTime(start_t), end_t > 0 ? DisplayTime(end_t) : ""));
-        ui->tableWidget_conn->setItem(row, 0, f);
+        c0->setAlignment(Qt::AlignCenter);
+        c0->setToolTip(tr("Start: %1\nEnd: %2").arg(DisplayTime(start_t), end_t > 0 ? DisplayTime(end_t) : ""));
+        ui->tableWidget_conn->setCellWidget(row, 0, c0);
 
         // C1: Outbound
-        f = f->clone();
+        auto f = f0->clone();
         f->setToolTip("");
-        f->setText(item["Tag"].toString());
+        f->setText(outboundTag);
         ui->tableWidget_conn->setItem(row, 1, f);
 
         // C2: Destination
-        f = f->clone();
+        f = f0->clone();
         QString target1 = item["Dest"].toString();
         QString target2 = item["RDest"].toString();
         if (target2.isEmpty() || target1 == target2) {

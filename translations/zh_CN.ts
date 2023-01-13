@@ -215,6 +215,18 @@
         <source>Max log lines</source>
         <translation>日志最大行数限制</translation>
     </message>
+    <message>
+        <source>Inbound Auth</source>
+        <translation>入站认证设置</translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation>用户名</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>密码</translation>
+    </message>
 </context>
 <context>
     <name>DialogEditGroup</name>
@@ -265,6 +277,10 @@
     <message>
         <source>Copy profile share links (Neko Links)</source>
         <translation>复制分组内配置的分享链接 (Neko Links)</translation>
+    </message>
+    <message>
+        <source>Manually column width</source>
+        <translation>手动调节列宽</translation>
     </message>
 </context>
 <context>
@@ -997,11 +1013,11 @@
     </message>
     <message>
         <source>End</source>
-        <translation>结束</translation>
+        <translation type="vanished">结束</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>活动</translation>
+        <translation type="vanished">活动</translation>
     </message>
     <message>
         <source>Start: %1

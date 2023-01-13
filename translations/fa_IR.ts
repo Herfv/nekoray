@@ -217,6 +217,18 @@
         <source>Max log lines</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Inbound Auth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished">نام کاربری</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DialogEditGroup</name>
@@ -267,6 +279,10 @@
     <message>
         <source>Copied</source>
         <translation>کپی شده است</translation>
+    </message>
+    <message>
+        <source>Manually column width</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1165,11 +1181,11 @@ Split by line.</source>
     </message>
     <message>
         <source>End</source>
-        <translation>پایان</translation>
+        <translation type="vanished">پایان</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>فعال</translation>
+        <translation type="vanished">فعال</translation>
     </message>
     <message>
         <source>Start: %1

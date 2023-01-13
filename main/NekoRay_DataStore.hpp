@@ -34,6 +34,16 @@ namespace NekoRay {
         void Delete(const QString &id);
     };
 
+    class InboundAuthorization : public JsonStore {
+    public:
+        QString username;
+        QString password;
+
+        InboundAuthorization();
+
+        [[nodiscard]] bool NeedAuth() const;
+    };
+
     class DataStore : public JsonStore {
     public:
         // Running
@@ -50,6 +60,7 @@ namespace NekoRay {
         Routing *routing = new Routing;
         int imported_count = 0;
         bool refreshing_group_list = false;
+        bool refreshing_group = false;
         int resolve_count = 0;
 
         // Flags
@@ -98,6 +109,7 @@ namespace NekoRay {
         QString inbound_address = "127.0.0.1";
         int inbound_socks_port = 2080; // or Mixed
         int inbound_http_port = -2081;
+        InboundAuthorization *inbound_auth = new InboundAuthorization;
         QString custom_inbound = "{\"inbounds\": []}";
 
         // DNS
