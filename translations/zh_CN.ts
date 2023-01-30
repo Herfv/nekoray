@@ -101,7 +101,7 @@
     </message>
     <message>
         <source>Language</source>
-        <translation>语言</translation>
+        <translation type="vanished">语言</translation>
     </message>
     <message>
         <source>Security</source>
@@ -468,11 +468,11 @@
     </message>
     <message>
         <source>Enhanced domain name resolution</source>
-        <translation>增强域名解析</translation>
+        <translation type="vanished">增强域名解析</translation>
     </message>
     <message>
         <source>Using multiple overseas DNS to query the server address can alleviate the DNS pollution of the server domain name to a certain extent, which may have side effects.</source>
-        <translation>使用多个境外 DNS 查询服务器地址，一定程度上可缓解对服务器域名的 DNS 污染，可能有副作用。</translation>
+        <translation type="vanished">使用多个境外 DNS 查询服务器地址，一定程度上可缓解对服务器域名的 DNS 污染，可能有副作用。</translation>
     </message>
     <message>
         <source>Enable DNS Routing</source>
@@ -558,6 +558,10 @@
         <source>Custom (global)</source>
         <translation>自定义 (全局)</translation>
     </message>
+    <message>
+        <source>Default Outbound</source>
+        <translation>默认出站</translation>
+    </message>
 </context>
 <context>
     <name>DialogVPNSettings</name>
@@ -584,6 +588,22 @@
     <message>
         <source>Bypass Process Name</source>
         <translation>绕过进程名</translation>
+    </message>
+    <message>
+        <source>Whitelist mode</source>
+        <translation>白名单模式</translation>
+    </message>
+    <message>
+        <source>Proxy CIDR</source>
+        <translation>代理 CIDR</translation>
+    </message>
+    <message>
+        <source>Proxy Process Name</source>
+        <translation>代理进程名</translation>
+    </message>
+    <message>
+        <source>Whether blacklisted or whitelisted, your traffic will be handled by nekobox_core (sing-tun). This is NOT equal to &quot;process mode&quot; of some software.</source>
+        <translation>无论是黑名单还是白名单，您的流量都将由 nekobox_core (sing-tun) 处理。这不等于某些软件的「进程模式」。</translation>
     </message>
 </context>
 <context>
@@ -1182,8 +1202,8 @@ End: %2</source>
         <translation>将服务器域名解析为 IP</translation>
     </message>
     <message>
-        <source>Resolving current group domain to IP, if support.</source>
-        <translation>将当前分组内服务器域名解析为 IP（如果支持）。</translation>
+        <source>Resolving domain to IP, if support.</source>
+        <translation>将服务器域名解析为 IP（如果支持）。</translation>
     </message>
     <message>
         <source>Export %1 config</source>
@@ -1234,6 +1254,10 @@ Split by line.</source>
     <message>
         <source>Edit</source>
         <translation>编辑</translation>
+    </message>
+    <message>
+        <source>Current Select</source>
+        <translation>当前选中</translation>
     </message>
 </context>
 <context>

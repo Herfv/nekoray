@@ -41,7 +41,6 @@ namespace NekoRay {
         _add(new configItem("custom_route", &custom_route_global, itemType::string));
         _add(new configItem("v2ray_asset_dir", &v2ray_asset_dir, itemType::string));
         _add(new configItem("sub_use_proxy", &sub_use_proxy, itemType::boolean));
-        _add(new configItem("enhance_domain", &enhance_resolve_server_domain, itemType::boolean));
         _add(new configItem("remember_id", &remember_id, itemType::integer));
         _add(new configItem("remember_enable", &remember_enable, itemType::boolean));
         _add(new configItem("language", &language, itemType::integer));
@@ -61,8 +60,9 @@ namespace NekoRay {
         _add(new configItem("vpn_ipv6", &vpn_ipv6, itemType::boolean));
         _add(new configItem("vpn_hide_console", &vpn_hide_console, itemType::boolean));
         _add(new configItem("vpn_strict_route", &vpn_strict_route, itemType::boolean));
-        _add(new configItem("vpn_bypass_process", &vpn_bypass_process, itemType::string));
-        _add(new configItem("vpn_bypass_cidr", &vpn_bypass_cidr, itemType::string));
+        _add(new configItem("vpn_bypass_process", &vpn_rule_process, itemType::string));
+        _add(new configItem("vpn_bypass_cidr", &vpn_rule_cidr, itemType::string));
+        _add(new configItem("vpn_rule_white", &vpn_rule_white, itemType::boolean));
         _add(new configItem("check_include_pre", &check_include_pre, itemType::boolean));
         _add(new configItem("sp_format", &system_proxy_format, itemType::string));
         _add(new configItem("sub_clear", &sub_clear, itemType::boolean));
@@ -108,6 +108,7 @@ namespace NekoRay {
         _add(new configItem("proxy_domain", &this->proxy_domain, itemType::string));
         _add(new configItem("block_ip", &this->block_ip, itemType::string));
         _add(new configItem("block_domain", &this->block_domain, itemType::string));
+        _add(new configItem("def_outbound", &this->def_outbound, itemType::string));
         _add(new configItem("custom", &this->custom, itemType::string));
     }
 

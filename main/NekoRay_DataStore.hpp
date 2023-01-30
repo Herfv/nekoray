@@ -10,6 +10,7 @@ namespace NekoRay {
         QString proxy_domain;
         QString block_ip;
         QString block_domain;
+        QString def_outbound = "proxy";
         QString custom = "{\"rules\": []}";
 
         explicit Routing(int preset = 0);
@@ -116,7 +117,6 @@ namespace NekoRay {
         QString remote_dns = "https://8.8.8.8/dns-query";
         QString direct_dns = "localhost";
         bool dns_routing = true;
-        bool enhance_resolve_server_domain = false;
 
         // Routing
         bool fake_dns = false;
@@ -133,8 +133,9 @@ namespace NekoRay {
         bool vpn_ipv6 = false;
         bool vpn_hide_console = false;
         bool vpn_strict_route = false;
-        QString vpn_bypass_process = "";
-        QString vpn_bypass_cidr = "";
+        bool vpn_rule_white = false;
+        QString vpn_rule_process = "";
+        QString vpn_rule_cidr = "";
 
         // Hotkey
         QString hotkey_mainwindow = "";

@@ -101,7 +101,7 @@
     </message>
     <message>
         <source>Language</source>
-        <translation>زبان</translation>
+        <translation type="vanished">زبان</translation>
     </message>
     <message>
         <source>Security</source>
@@ -469,14 +469,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Using multiple overseas DNS to query the server address can alleviate the DNS pollution of the server domain name to a certain extent, which may have side effects.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enhanced domain name resolution</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Enable DNS Routing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -560,6 +552,10 @@
         <source>Remove routing: %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Default Outbound</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DialogVPNSettings</name>
@@ -585,6 +581,22 @@
     </message>
     <message>
         <source>Bypass Process Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether blacklisted or whitelisted, your traffic will be handled by nekobox_core (sing-tun). This is NOT equal to &quot;process mode&quot; of some software.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whitelist mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy CIDR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy Process Name</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1151,7 +1163,7 @@
         <translation>کد QR یافت نشد</translation>
     </message>
     <message>
-        <source>Resolving current group domain to IP, if support.</source>
+        <source>Resolving domain to IP, if support.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1231,6 +1243,10 @@ End: %2</source>
     <message>
         <source>Stopping profile %1</source>
         <translation>متوقف کردن پروفایل %1</translation>
+    </message>
+    <message>
+        <source>Current Select</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
