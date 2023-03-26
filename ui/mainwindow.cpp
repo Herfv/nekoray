@@ -1,6 +1,7 @@
 #include "./ui_mainwindow.h"
 #include "mainwindow.h"
 
+#include "fmt/Preset.hpp"
 #include "db/ProfileFilter.hpp"
 #include "db/ConfigBuilder.hpp"
 #include "sub/GroupUpdater.hpp"
@@ -92,8 +93,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     if (IS_NEKO_BOX) {
         software_name = "NekoBox";
         software_core_name = "sing-box";
+        // replace default values
         if (NekoRay::dataStore->log_level == "warning") {
             NekoRay::dataStore->log_level = "info";
+        }
+        if (!Preset::SingBox::DomainStrategy.contains(NekoRay::dataStore->outbound_domain_strategy)) {
+            NekoRay::dataStore->outbound_domain_strategy = "";
         }
     }
 
@@ -107,6 +112,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->toolButton_update, &QToolButton::clicked, this, [=] { runOnNewThread([=] { CheckUpdate(); }); });
 
     // Setup log UI
+    ui->splitter->restoreState(DecodeB64IfValid(NekoRay::dataStore->splitter_state));
     new SyntaxHighlighter(false, qvLogDocument);
     qvLogDocument->setUndoRedoEnabled(false);
     ui->masterLogBrowser->setUndoRedoEnabled(false);
@@ -583,20 +589,24 @@ void MainWindow::on_menu_hotkey_settings_triggered() {
 
 void MainWindow::on_commitDataRequest() {
     qDebug() << "Start of data save";
+    //
     if (!isMaximized()) {
         auto olds = NekoRay::dataStore->mw_size;
         auto news = QString("%1x%2").arg(size().width()).arg(size().height());
         if (olds != news) {
             NekoRay::dataStore->mw_size = news;
-            NekoRay::dataStore->Save();
         }
     }
+    //
+    NekoRay::dataStore->splitter_state = ui->splitter->saveState().toBase64();
     //
     auto last_id = NekoRay::dataStore->started_id;
     neko_stop();
     if (NekoRay::dataStore->remember_enable && last_id >= 0) {
-        NekoRay::dataStore->UpdateStartedId(last_id);
+        NekoRay::dataStore->remember_id = last_id;
     }
+    //
+    NekoRay::dataStore->Save();
     qDebug() << "End of data save";
 }
 
@@ -1492,7 +1502,6 @@ void MainWindow::on_masterLogBrowser_customContextMenuRequested(const QPoint &po
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::MouseButtonPress) {
         auto mouseEvent = dynamic_cast<QMouseEvent *>(event);
-
         if (obj == ui->label_running && mouseEvent->button() == Qt::LeftButton && running != nullptr) {
             speedtest_current();
             return true;
