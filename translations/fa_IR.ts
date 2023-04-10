@@ -234,8 +234,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Settings</source>
-        <translation type="unfinished">تنظیمات</translation>
+        <source>Core Options</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -380,10 +380,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Custom (%1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Custom (Extra Core)</source>
         <translation>سفارشی ( هسته اضافه)</translation>
     </message>
@@ -405,6 +401,14 @@
     </message>
     <message>
         <source>Reality public key. If not empty, turn TLS into REALITY.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom (%1 outbound)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom (%1 config)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -710,6 +714,10 @@ https://matsuridayo.github.io/n-configuration/#vpn-tun</source>
     </message>
     <message>
         <source>Preview config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please fill the complete config.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1306,6 +1314,10 @@ End: %2</source>
 3. In and Out IP
 4. UDP Latency</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Window</source>
+        <translation>نمایش پنجره برنامه</translation>
     </message>
 </context>
 <context>
