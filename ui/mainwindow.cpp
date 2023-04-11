@@ -19,8 +19,8 @@
 
 #include "3rdparty/qrcodegen.hpp"
 #include "3rdparty/VT100Parser.hpp"
-#include "qv2ray/v2/components/proxy/QvProxyConfigurator.hpp"
-#include "qv2ray/v2/ui/LogHighlighter.hpp"
+#include "3rdparty/qv2ray/v2/components/proxy/QvProxyConfigurator.hpp"
+#include "3rdparty/qv2ray/v2/ui/LogHighlighter.hpp"
 
 #ifndef NKR_NO_ZXING
 #include "3rdparty/ZxingQtReader.hpp"
@@ -99,6 +99,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         }
         if (!Preset::SingBox::DomainStrategy.contains(NekoRay::dataStore->outbound_domain_strategy)) {
             NekoRay::dataStore->outbound_domain_strategy = "";
+        }
+        //
+        if (QDir("dashboard").isEmpty()) {
+            QDir().mkdir("dashboard");
+            QFile::copy(":/neko/dashboard-notice.html", "dashboard/index.html");
         }
     }
 

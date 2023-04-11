@@ -403,6 +403,25 @@
     </message>
 </context>
 <context>
+    <name>DialogFirstSetup</name>
+    <message>
+        <source>First time setup</source>
+        <translation>首次设置</translation>
+    </message>
+    <message>
+        <source>It looks like you are using this software for the first time, please select a core.
+
+These settings can be changed later.</source>
+        <translation>看来您是第一次使用该软件，请选择内核。
+
+这些设置可以稍后更改。</translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation>退出</translation>
+    </message>
+</context>
+<context>
     <name>DialogHotkey</name>
     <message>
         <source>Hotkey</source>
@@ -1461,12 +1480,8 @@ As of January 1, 2022, compatibility with MD5 authentication information will be
         <translation>正在清理服务器...</translation>
     </message>
     <message>
-        <source>Enable VPN</source>
-        <translation type="obsolete">启用 VPN</translation>
-    </message>
-    <message>
-        <source>Enable System Proxy</source>
-        <translation type="obsolete">启用系统代理</translation>
+        <source>Subscription request fininshed: %1</source>
+        <translation>订阅请求完成: %1</translation>
     </message>
 </context>
 <context>
