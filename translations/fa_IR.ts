@@ -80,14 +80,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Settings changed</source>
-        <translation>تنظیمات تغییر کرد</translation>
-    </message>
-    <message>
-        <source>Restart nekoray to take effect.</source>
-        <translation>برای اعمال تغییرات nekoray را مجددا راه اندازی کنید.</translation>
-    </message>
-    <message>
         <source>Concurrent</source>
         <translation>هم زمان</translation>
     </message>
@@ -247,6 +239,10 @@ For NekoRay, this rewrites the underlying(localhost) DNS in VPN mode.
 For NekoBox, this rewrites the underlying(localhost) DNS in VPN mode, normal mode, and also URL Test.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>If you VPN mode is not working, try to change this option.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DialogEditGroup</name>
@@ -328,10 +324,6 @@ For NekoBox, this rewrites the underlying(localhost) DNS in VPN mode, normal mod
     <message>
         <source>Name</source>
         <translation>اسم</translation>
-    </message>
-    <message>
-        <source>Custom Json Settings</source>
-        <translation>تنظیمات JSON سفارشی</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -419,6 +411,14 @@ For NekoBox, this rewrites the underlying(localhost) DNS in VPN mode, normal mod
     </message>
     <message>
         <source>Custom (%1 config)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Outbound Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Config Settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1349,6 +1349,14 @@ End: %2</source>
     <message>
         <source>Show Window</source>
         <translation>نمایش پنجره برنامه</translation>
+    </message>
+    <message>
+        <source>Settings changed</source>
+        <translation type="unfinished">تنظیمات تغییر کرد</translation>
+    </message>
+    <message>
+        <source>Restart nekoray to take effect.</source>
+        <translation type="unfinished">برای اعمال تغییرات nekoray را مجددا راه اندازی کنید.</translation>
     </message>
 </context>
 <context>
