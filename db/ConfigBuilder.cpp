@@ -620,16 +620,17 @@ namespace NekoRay {
                         needMux = false;
                     }
                 }
+                if (stream->multiplex_status == 0) {
+                    if (!dataStore->mux_default_on) needMux = false;
+                } else if (stream->multiplex_status == 2) {
+                    needMux = false;
+                }
             }
 
             if (ent->type == "shadowsocks") {
                 if (!IS_NEKO_BOX || outbound["udp_over_tcp"] == true || !outbound["plugin"].isNull()) {
                     needMux = false;
                 }
-            }
-
-            if (ent->type == "vless" && IS_NEKO_BOX) {
-                needMux = false; // TODO remove after 1.3 core
             }
 
             // common
