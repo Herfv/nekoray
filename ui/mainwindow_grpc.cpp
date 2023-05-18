@@ -26,11 +26,6 @@ void MainWindow::setup_grpc() {
             MW_show_log("[Error] gRPC: " + errStr);
         },
         "127.0.0.1:" + Int2String(NekoRay::dataStore->core_port), NekoRay::dataStore->core_token);
-    auto t = new QTimer();
-    connect(t, &QTimer::timeout, this, [=]() {
-        refresh_status();
-    });
-    t->start(2000);
 
     // Looper
     runOnNewThread([=] { NekoRay::traffic::trafficLooper->Loop(); });
@@ -256,7 +251,10 @@ void MainWindow::neko_start(int _id) {
         return true;
     };
 
-    if (!mu_starting.tryLock()) return;
+    if (!mu_starting.tryLock()) {
+        MessageBoxWarning(software_name, "Another profile is starting...");
+        return;
+    }
 
     // timeout message
     auto restartMsgbox = new QMessageBox(QMessageBox::Question, software_name, tr("If there is no response for a long time, it is recommended to restart the software."),

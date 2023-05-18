@@ -36,7 +36,6 @@
 #include <QLabel>
 #include <QTextBlock>
 #include <QScrollBar>
-#include <QMutex>
 #include <QScreen>
 #include <QDesktopServices>
 #include <QInputDialog>
@@ -45,8 +44,10 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QFileInfo>
+#include <QElapsedTimer>
 
 QElapsedTimer coreRestartTimer;
+QAtomicInt logCounter;
 
 void UI_InitMainWindow() {
     mainwindow = new MainWindow;
@@ -149,6 +150,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     MW_show_log_ext_vt100 = [=](const QString &log) {
         runOnUiThread([=] { show_log_impl(cleanVT100String(log)); });
     };
+    //
+    auto logCounterTimer = new QTimer(this);
+    connect(logCounterTimer, &QTimer::timeout, this, [&] { logCounter.fetchAndStoreRelaxed(0); });
+    logCounterTimer->setInterval(1000);
+    logCounterTimer->start();
 
     // table UI
     ui->proxyListTable->callback_save_order = [=] {
@@ -1487,6 +1493,7 @@ void MainWindow::show_log_impl(const QString &log) {
         if (showThisLine) newLines << line;
     }
     if (newLines.isEmpty()) return;
+    if (logCounter.fetchAndAddRelaxed(newLines.count()) > NekoRay::dataStore->max_log_line) return;
 
     FastAppendTextDocument(newLines.join("\n"), qvLogDocument);
     // qvLogDocument->setPlainText(qvLogDocument->toPlainText() + log);
