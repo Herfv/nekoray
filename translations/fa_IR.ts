@@ -290,6 +290,14 @@ For NekoBox, this rewrites the underlying(localhost) DNS in VPN mode, normal mod
         <source>Manually column width</source>
         <translation>عرض ستون به صورت دستی</translation>
     </message>
+    <message>
+        <source>Front Proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished">هیچ یک</translation>
+    </message>
 </context>
 <context>
     <name>DialogEditProfile</name>
@@ -1464,6 +1472,10 @@ End: %2</source>
     </message>
     <message>
         <source>Failed to stop, please restart the program.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select mode, double-click or press Enter to select a profile, press ESC to exit.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
