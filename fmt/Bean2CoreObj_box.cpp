@@ -73,6 +73,8 @@ namespace NekoGui_fmt {
             auto pkt = packet_encoding;
             if (pkt == "packet") pkt = "packetaddr";
             outbound->insert("packet_encoding", pkt);
+        } else if (outbound->value("type").toString() == "vless") {
+            outbound->insert("packet_encoding", "");
         }
     }
 
