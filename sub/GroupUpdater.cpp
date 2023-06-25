@@ -27,7 +27,7 @@ namespace NekoGui_sub {
         // 1. "security"
         if (stream->security == "none" || stream->security == "0" || stream->security == "false") {
             stream->security = "";
-        } else if (stream->security == "xtls" || stream->security == "1" || stream->security == "true") {
+        } else if (stream->security == "1" || stream->security == "true") {
             stream->security = "tls";
         }
         // 2. TLS SNI: v2rayN config builder generate sni like this, so set sni here for their format.
@@ -296,6 +296,8 @@ namespace NekoGui_sub {
                             }
                         }
                         bean->stream->path = Node2QString(ws["path"]);
+                        bean->stream->ws_early_data_length = Node2Int(ws["max-early-data"]);
+                        bean->stream->ws_early_data_name = Node2QString(ws["early-data-header-name"]);
                     }
 
                     auto grpc = NodeChild(proxy, {"grpc-opts", "grpc-opt"});
@@ -329,6 +331,8 @@ namespace NekoGui_sub {
                             }
                         }
                         bean->stream->path = Node2QString(ws["path"]);
+                        bean->stream->ws_early_data_length = Node2Int(ws["max-early-data"]);
+                        bean->stream->ws_early_data_name = Node2QString(ws["early-data-header-name"]);
                     }
 
                     auto grpc = NodeChild(proxy, {"grpc-opts", "grpc-opt"});
