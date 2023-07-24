@@ -604,6 +604,13 @@
                 <widget class="QLineEdit" name="mux_concurrency"/>
                </item>
                <item>
+                <widget class="QCheckBox" name="mux_padding">
+                 <property name="text">
+                  <string notr="true">Padding</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QCheckBox" name="mux_default_on">
                  <property name="text">
                   <string>Default On</string>
@@ -694,8 +701,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>568</width>
-            <height>297</height>
+            <width>198</width>
+            <height>58</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_6">
