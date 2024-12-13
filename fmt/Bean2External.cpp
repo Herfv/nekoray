@@ -9,7 +9,7 @@
 #define WriteTempFile(fn, data)                                   \
     QDir dir;                                                     \
     if (!dir.exists("temp")) dir.mkdir("temp");                   \
-    QFile f(QString("temp/") + fn);                               \
+    QFile f(QStringLiteral("temp/") + fn);                               \
     bool ok = f.open(QIODevice::WriteOnly | QIODevice::Truncate); \
     if (ok) {                                                     \
         f.write(data);                                            \
@@ -50,7 +50,7 @@ namespace NekoGui_fmt {
             return 1;
         };
 
-        if (!forceExternal && (proxy_type == proxy_TUIC || hopPort.trimmed().isEmpty())) {
+        if (!forceExternal) {
             // sing-box support
             return 0;
         } else {

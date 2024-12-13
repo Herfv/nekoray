@@ -58,8 +58,14 @@ void MainWindow::setup_grpc() {
 inline bool speedtesting = false;
 inline QList<QThread *> speedtesting_threads = {};
 
-void MainWindow::speedtest_current_group(int mode) {
+void MainWindow::speedtest_current_group(int mode, bool test_group) {
+    if (speedtesting) {
+        MessageBoxWarning(software_name, QObject::tr("The last speed test did not exit completely, please wait. If it persists, please restart the program."));
+        return;
+    }
+
     auto profiles = get_selected_or_group();
+    if (test_group) profiles = NekoGui::profileManager->CurrentGroup()->ProfilesWithOrder();
     if (profiles.isEmpty()) return;
     auto group = NekoGui::profileManager->CurrentGroup();
     if (group->archive) return;
@@ -75,11 +81,6 @@ void MainWindow::speedtest_current_group(int mode) {
     }
 
 #ifndef NKR_NO_GRPC
-    if (speedtesting) {
-        MessageBoxWarning(software_name, "The last speed test did not exit completely, please wait. If it persists, please restart the program.");
-        return;
-    }
-
     QStringList full_test_flags;
     if (mode == libcore::FullTest) {
         auto w = new QDialog(this);
@@ -238,6 +239,7 @@ void MainWindow::speedtest_current_group(int mode) {
         lock_return.lock();
         lock_return.unlock();
         speedtesting = false;
+        MW_show_log(QObject::tr("Speedtest finished."));
     });
 #endif
 }
@@ -262,12 +264,12 @@ void MainWindow::speedtest_current() {
 
         runOnUiThread([=] {
             if (!result.error().empty()) {
-                MW_show_log(QString("UrlTest error: %1").arg(result.error().c_str()));
+                MW_show_log(QStringLiteral("UrlTest error: %1").arg(result.error().c_str()));
             }
             if (latency <= 0) {
                 ui->label_running->setText(tr("Test Result") + ": " + tr("Unavailable"));
             } else if (latency > 0) {
-                ui->label_running->setText(tr("Test Result") + ": " + QString("%1 ms").arg(latency));
+                ui->label_running->setText(tr("Test Result") + ": " + QStringLiteral("%1 ms").arg(latency));
             }
         });
     });
